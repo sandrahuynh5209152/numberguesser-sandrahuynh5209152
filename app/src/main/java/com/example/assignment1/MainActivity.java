@@ -55,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
             //Conditions to indicate hints
             if (randNumber < userGuess && numberOfTries <6) {
                 mHinting.setText("Your guess was too high! Make another guess!");
-                //theInputs.add(userGuess);
+                //numberOfTries++
 
             } if (randNumber > userGuess && numberOfTries<6){
                 mHinting.setText("Your guess was too low! Make another guess!");
-                //theInputs.add(userGuess);
+                //numberOfTries++
 
             } if (randNumber == userGuess && numberOfTries<6) {
                 mHinting.setText("Congratulations!");
