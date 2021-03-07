@@ -2,6 +2,7 @@ package com.example.assignment1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,11 +13,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView mHinting;
     private TextView mGuessedNumber;
     private int numberOfTries;
+    public static int attempt = 0;
+    public static final int maxAttempts = 5;
+    private Button validate;
 
     //Generates a random number upon onCreate()
     int randNumber = (int) ((Math.random() * (100 - 1)) + 1);
@@ -31,24 +35,35 @@ public class MainActivity extends AppCompatActivity {
         mGuessedNumber = findViewById(R.id.tnGuessedNumber);
 
         //triggering the Check Your Guess button
-        Button button = findViewById(R.id.btCheckGuess);
-        button.setOnClickListener(new View.OnClickListener() {
+        validate = (Button) findViewById(R.id.btCheckGuess);
+        validate.setOnClickListener(this);
+
+        newGame();
+    }
+
+        //triggers a new game if 5/5 attempts are reached otherwise continue
 
             public void onClick(View v) {
-                MainActivity.this.launchCheckNumber();
+        attempt++;
+
+        if(attempt == maxAttempts){
+            openDetailActivity();
+            newGame();
+
             }
-        });
+        else if (v == validate){
+            launchCheckNumber();
+        }
+
     }
 
     //Method for the Check Your Guess Button
     private void launchCheckNumber() {
 
         //Reads user input
-        EditText inputtedNumber = (EditText) findViewById(R.id.tnGuessedNumber);
-        String guessedNumber = inputtedNumber.getText().toString();
-        int userGuess = Integer.parseInt(guessedNumber);
+        int userGuess = Integer.parseInt(mGuessedNumber.getText().toString());
 
-        //An attempt at creating a limit of 5 guesses - unsuccessful
+        //Cases
         for (numberOfTries = 1; numberOfTries < 6; numberOfTries++) {
             numberOfTries++;
 
@@ -62,17 +77,26 @@ public class MainActivity extends AppCompatActivity {
                 //numberOfTries++
 
             } if (randNumber == userGuess && numberOfTries<6) {
-                mHinting.setText("Congratulations!");
+                openDetailActivity2();
             }
         }
     }
-    //if the loop had worked, this would be the method to trigger a new game
+    //Method to trigger a new game
         private void newGame () {
             int randNumber = (int) ((Math.random() * (100 - 1)) + 1);
-            mHinting.setText("New game!");
             numberOfTries = 0;
             mGuessedNumber.setText("");
 
+        }
+
+        public void openDetailActivity(){
+        Intent intent = new Intent(this, DetailActivity.class);
+        startActivity(intent);
+        }
+
+        public void openDetailActivity2(){
+        Intent intent = new Intent (this, DetailActivity2.class);
+        startActivity(intent);
         }
     }
 
